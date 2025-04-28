@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPN Discord Verification</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(270deg, hsl(210, 30%, 85%), hsl(260, 30%, 85%), hsl(310, 30%, 85%));
+    background-size: 600% 600%;
+    animation: gradientBG 30s ease infinite;
+    transition: background 1s;
+  }
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  nav {
+    background: rgba(0,0,0,0.3);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  nav a, .theme-toggle {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    background: none;
+    border: 2px solid white;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+    padding-bottom: 100px;
+  }
+  .captcha-box {
+    background: rgba(255,255,255,0.85);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    text-align: center;
+    backdrop-filter: blur(8px);
+    transition: background 0.5s, color 0.5s;
+  }
+  body.dark-mode {
+    background: linear-gradient(270deg, hsl(240, 20%, 15%), hsl(260, 20%, 15%), hsl(280, 20%, 15%));
+    background-size: 600% 600%;
+  }
+  body.dark-mode .captcha-box {
+    background: rgba(30,30,30,0.9);
+    color: white;
+  }
+  #nowPlaying {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 15px 0;
+    background: linear-gradient(90deg, #ff70a6, #70d6ff, #7ed957);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 5s ease infinite;
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .music-player {
+    position: fixed;
+    bottom: 90px;
+    left: 20px;
+    width: 320px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    padding: 10px;
+    cursor: move;
+    transition: background 0.5s;
+  }
+  body.dark-mode .music-player {
+    background: rgba(20,20,20,0.85);
+  }
+  .album-art {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 10px;
+    transition: transform 0.5s;
+  }
+  .album-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .album-art.spin img {
+    animation: spin 30s linear infinite;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .music-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 5px;
+  }
+  .music-controls button {
+    background: rgba(0,0,0,0.7);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .music-controls button:hover {
+    background: rgba(100,100,100,0.8);
+  }
+  .music-title {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+  }
+  body.dark-mode .music-title {
+    color: #ccc;
+  }
+  .progress-container {
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 5px;
+  }
+  .progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #ff70a6, #70d6ff);
+    transition: width 0.2s ease;
+  }
+  .slider-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 320px;
+    text-align: center;
+  }
+  input[type=range] {
+    width: 80%;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://discord.gg/vpn" target="_blank">Join Bxrty's Gaming VPN Server!</a>
+  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+</nav>
+
+<div class="main-container">
+  <div class="captcha-box">
+    <h2>VPN Discord Verification</h2>
+    <a id="discordLoginButton" class="theme-toggle" href="#">Login with Discord</a>
+    <input type="hidden" id="discordIdInput">
+    <br><br>
+    <select id="playlistSelector" onchange="changePlaylist()">
+      <option value="shoegaze">Shoegaze/Grungaze</option>
+      <option value="hardcore">Hardcore</option>
+      <option value="lofi">Lofi</option>
+      <option value="rap">Rap</option>
+      <option value="jazz">Jazz</option>
+    </select>
+    <div id="nowPlaying">Now Playing: Shoegaze/Grungaze</div>
+  </div>
+</div>
+
+<div class="music-player" id="musicPlayer">
+  <div class="album-art" id="albumArt">
+    <img id="albumImage" src="" alt="Album Art">
+  </div>
+  <div class="music-title" id="musicTitle">Loading...</div>
+  <div class="music-controls">
+    <button onclick="playMusic()">Play</button>
+    <button onclick="pauseMusic()">Pause</button>
+    <button onclick="nextMusic()">Next</button>
+  </div>
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+</div>
+
+<div class="slider-container">
+  <input type="range" id="hueSlider" min="0" max="360" value="0" onchange="changeHue()">
+</div>
+
+<div id="player"></div>
+
+<script>
+// SETTINGS
+const clientId = '1283074346918744175';
+const redirectUri = 'YOUR_REDIRECT_URI';
+const backendUrl = 'YOUR_VERCEL_BACKEND_URL';
+const verifyWebhook = 'https://api.botghost.com/webhook/1283074346918744175/zo58m0hhd0qfb0ruenl98t';
+const playlists = {
+  hardcore: 'PLMJGV7p_FGBWtBoWNYv2H1508z3gyEYLS',
+  shoegaze: 'PLzXFVyVdaUThF4H6qdtJBQw7iVYmULpi0',
+  lofi: 'PLfsYQtR1st_XD3VBVZc77BabITQddjMpe',
+  rap: 'PLIwZQxuoolfoQX3G6v55ThCQDKaLnQusI',
+  jazz: 'PLneA0BedPWJEvDseXizycnviRmoHMci91'
+};
+let currentPlaylist = 'shoegaze';
+
+let darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const storedTheme = localStorage.getItem('theme');
+if (storedTheme) darkMode = storedTheme === 'dark';
+function applyTheme() { document.body.classList.toggle('dark-mode', darkMode); changeHue(); localStorage.setItem('theme', darkMode ? 'dark' : 'light'); }
+function toggleTheme() { darkMode = !darkMode; applyTheme(); }
+applyTheme();
+
+function redirectToDiscord() {
+  const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
+  window.location.href = oauthUrl;
+}
+document.getElementById('discordLoginButton').onclick = redirectToDiscord;
+
+const urlParams = new URLSearchParams(window.location.search);
+const code = urlParams.get('code');
+if (code) {
+  fetch(`${backendUrl}/api/oauth/callback?code=${code}`)
+    .then(res => res.json())
+    .then(data => {
+      fetch(`${backendUrl}/api/userinfo?access_token=${data.access_token}`)
+        .then(res => res.json())
+        .then(userData => {
+          document.getElementById('discordIdInput').value = userData.id;
+          fetch(verifyWebhook, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ discord_id: userData.id, verified: true })
+          }).then(() => {
+            alert('✅ You have been verified!');
+          }).catch(() => {
+            alert('❌ Error verifying.');
+          });
+        });
+    });
+}
+
+function changeHue() {
+  const hue = document.getElementById("hueSlider").value;
+  if (darkMode) {
+    document.body.style.background = `linear-gradient(270deg, hsl(${hue}, 20%, 15%), hsl(${(parseInt(hue)+30)%360}, 20%, 15%), hsl(${(parseInt(hue)+60)%360}, 20%, 15%))`;
+  } else {
+    document.body.style.background = `linear-gradient(270deg, hsl(${hue}, 30%, 85%), hsl(${(parseInt(hue)+50)%360}, 30%, 85%), hsl(${(parseInt(hue)+100)%360}, 30%, 85%))`;
+  }
+}
+
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+let player;
+function onYouTubeIframeAPIReady() {
+  loadPlaylist(playlists[currentPlaylist]);
+}
+function loadPlaylist(listId) {
+  if (player) player.destroy();
+  player = new YT.Player('player', {
+    height: '0',
+    width: '0',
+    playerVars: { listType: 'playlist', list: listId },
+    events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+function onPlayerReady(event) {
+  event.target.setVolume(50);
+  playMusic();
+}
+function onPlayerStateChange(event) {
+  if (event.data == YT.PlayerState.PLAYING) {
+    document.getElementById('albumArt').classList.add('spin');
+  } else {
+    document.getElementById('albumArt').classList.remove('spin');
+  }
+  updateTitleAndImage();
+}
+function playMusic() { if (player) player.playVideo(); }
+function pauseMusic() { if (player) player.pauseVideo(); }
+function nextMusic() { if (player) player.nextVideo(); }
+function updateTitleAndImage() {
+  if (!player || !player.getVideoData) return;
+  const data = player.getVideoData();
+  document.getElementById('musicTitle').innerText = data.title || 'Loading...';
+  if (data.video_id) {
+    document.getElementById('albumImage').src = `https://img.youtube.com/vi/${data.video_id}/hqdefault.jpg`;
+  }
+}
+setInterval(() => {
+  if (player && player.getDuration) {
+    const progress = (player.getCurrentTime() / player.getDuration()) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+  }
+}, 500);
+
+function changePlaylist() {
+  const selector = document.getElementById('playlistSelector');
+  currentPlaylist = selector.value;
+  document.getElementById('nowPlaying').innerText = `Now Playing: ${selector.options[selector.selectedIndex].text}`;
+  loadPlaylist(playlists[currentPlaylist]);
+}
+</script>
+
+</body>
+</html>
