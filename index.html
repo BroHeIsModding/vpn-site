@@ -218,22 +218,24 @@ input[type=range]::-webkit-slider-thumb {
 
 <div class="main-container">
   <div class="captcha-box">
-    <h2>VPN Discord Verification</h2>
-    <a id="discordLoginButton" class="theme-toggle" href="#">Login with Discord</a>
-    <div class="user-info" id="userInfo" style="display:none;">
-      <img id="userAvatar" class="user-avatar" src="">
-      <div id="userName" class="user-name"></div>
-    </div>
-    <br><br>
-    <select id="playlistSelector" onchange="changePlaylist()">
-      <option value="shoegaze">Shoegaze/Grungaze</option>
-      <option value="hardcore">Hardcore</option>
-      <option value="lofi">Lofi</option>
-      <option value="rap">Rap</option>
-      <option value="jazz">Jazz</option>
-    </select>
-    <div id="nowPlaying">Now Playing: Shoegaze/Grungaze</div>
+  <h2>VPN Discord Verification</h2>
+  <a id="discordLoginButton" class="theme-toggle" href="#">Login with Discord</a>
+  <input type="hidden" id="discordIdInput">
+  <div id="userInfo" style="display:none; margin-top:10px; align-items: center; flex-direction: column;">
+    <img id="userAvatar" src="" alt="User Avatar" style="width:60px;height:60px;border-radius:50%;margin-bottom:5px;">
+    <div id="userName" style="font-weight:bold;font-size:16px;color:#555;"></div>
   </div>
+  <br><br>
+  <select id="playlistSelector" onchange="changePlaylist()">
+    <option value="shoegaze">Shoegaze/Grungaze</option>
+    <option value="hardcore">Hardcore</option>
+    <option value="lofi">Lofi</option>
+    <option value="rap">Rap</option>
+    <option value="jazz">Jazz</option>
+  </select>
+  <div id="nowPlaying">Now Playing: Shoegaze/Grungaze</div>
+</div>
+
 </div>
 
 <div class="music-player" id="musicPlayer">
