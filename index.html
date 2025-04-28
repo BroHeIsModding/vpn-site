@@ -215,6 +215,7 @@ input[type=range] {
 <div id="player"></div>
 
 <script>
+// SETTINGS
 const clientId = '1283074346918744175';
 const redirectUri = 'https://broheismodding.github.io/vpn-site/';
 const backendUrl = 'https://vpn-backend-plum.vercel.app';
@@ -228,6 +229,7 @@ const playlists = {
 };
 let currentPlaylist = 'shoegaze';
 
+// Dark mode settings
 let darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 const storedTheme = localStorage.getItem('theme');
 if (storedTheme) darkMode = storedTheme === 'dark';
@@ -235,11 +237,14 @@ function applyTheme() { document.body.classList.toggle('dark-mode', darkMode); c
 function toggleTheme() { darkMode = !darkMode; applyTheme(); }
 applyTheme();
 
-document.getElementById('discordLoginButton').onclick = () => {
+// Redirect to Discord
+function redirectToDiscord() {
   const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
   window.location.href = oauthUrl;
-};
+}
+document.getElementById('discordLoginButton').onclick = redirectToDiscord;
 
+// OAuth2 Flow
 const urlParams = new URLSearchParams(window.location.search);
 const code = urlParams.get('code');
 
@@ -247,13 +252,16 @@ if (code) {
   fetch(`${backendUrl}/api/oauth/callback?code=${code}`)
     .then(res => res.json())
     .then(data => {
-      window.history.replaceState({}, document.title, redirectUri);
+      window.history.replaceState({}, document.title, redirectUri); // Clean URL immediately
+
       if (data.error) {
         console.error('OAuth Error:', data.error);
         alert('❌ Discord login failed.');
         return;
       }
+
       console.log('Access Token:', data.access_token);
+
       fetch(`${backendUrl}/api/userinfo?access_token=${data.access_token}`)
         .then(res => res.json())
         .then(userData => {
@@ -281,6 +289,7 @@ if (code) {
     });
 }
 
+// Color slider
 function changeHue() {
   const hue = document.getElementById("hueSlider").value;
   if (darkMode) {
@@ -290,6 +299,7 @@ function changeHue() {
   }
 }
 
+// YouTube Music
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -338,6 +348,7 @@ setInterval(() => {
   }
 }, 500);
 
+// Playlist changer
 function changePlaylist() {
   const selector = document.getElementById('playlistSelector');
   currentPlaylist = selector.value;
