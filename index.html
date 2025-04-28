@@ -6,7 +6,7 @@
 <title>VPN Discord Verification</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* (CSS styles would be here: music player, dark/light toggle, gradient background, etc.) */
+/* Add your full CSS styles here (music player, dark/light toggle, gradient background, etc.) */
 </style>
 </head>
 <body>
@@ -55,7 +55,6 @@
 <div id="player"></div>
 
 <script>
-// SETTINGS
 const clientId = '1283074346918744175';
 const redirectUri = 'https://broheismodding.github.io/vpn-site/';
 const backendUrl = 'https://vpn-backend-plum.vercel.app';
@@ -76,14 +75,11 @@ function applyTheme() { document.body.classList.toggle('dark-mode', darkMode); c
 function toggleTheme() { darkMode = !darkMode; applyTheme(); }
 applyTheme();
 
-// Redirect to Discord Login
-function redirectToDiscord() {
+document.getElementById('discordLoginButton').onclick = () => {
   const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
   window.location.href = oauthUrl;
-}
-document.getElementById('discordLoginButton').onclick = redirectToDiscord;
+};
 
-// OAuth2 Flow
 const urlParams = new URLSearchParams(window.location.search);
 const code = urlParams.get('code');
 
@@ -91,17 +87,13 @@ if (code) {
   fetch(`${backendUrl}/api/oauth/callback?code=${code}`)
     .then(res => res.json())
     .then(data => {
-      // 🧹 CLEAN URL Immediately
       window.history.replaceState({}, document.title, redirectUri);
-
       if (data.error) {
         console.error('OAuth Error:', data.error);
         alert('❌ Discord login failed.');
         return;
       }
-
       console.log('Access Token:', data.access_token);
-
       fetch(`${backendUrl}/api/userinfo?access_token=${data.access_token}`)
         .then(res => res.json())
         .then(userData => {
@@ -129,7 +121,6 @@ if (code) {
     });
 }
 
-// Background Color Changer
 function changeHue() {
   const hue = document.getElementById("hueSlider").value;
   if (darkMode) {
@@ -139,7 +130,6 @@ function changeHue() {
   }
 }
 
-// YouTube Music Player Setup
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -188,7 +178,6 @@ setInterval(() => {
   }
 }, 500);
 
-// Playlist Changer
 function changePlaylist() {
   const selector = document.getElementById('playlistSelector');
   currentPlaylist = selector.value;
@@ -196,7 +185,6 @@ function changePlaylist() {
   loadPlaylist(playlists[currentPlaylist]);
 }
 </script>
-
 
 </body>
 </html>
