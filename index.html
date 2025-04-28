@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VPN Discord Verification</title>
+<title>VPN Discord Verification | Bxrty Gaming</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
+/* 🌌 GENERAL PAGE */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
@@ -19,6 +20,8 @@ body {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* NAVIGATION */
 nav {
   background: rgba(0,0,0,0.3);
   padding: 10px;
@@ -37,6 +40,8 @@ nav a, .theme-toggle {
   cursor: pointer;
   transition: 0.3s;
 }
+
+/* MAIN CONTAINER */
 .main-container {
   display: flex;
   flex-direction: column;
@@ -45,6 +50,8 @@ nav a, .theme-toggle {
   min-height: 90vh;
   padding-bottom: 100px;
 }
+
+/* CAPTCHABOX */
 .captcha-box {
   background: rgba(255,255,255,0.85);
   padding: 30px;
@@ -54,6 +61,8 @@ nav a, .theme-toggle {
   backdrop-filter: blur(8px);
   transition: background 0.5s, color 0.5s;
 }
+
+/* DARK MODE */
 body.dark-mode {
   background: linear-gradient(270deg, hsl(240, 20%, 15%), hsl(260, 20%, 15%), hsl(280, 20%, 15%));
   background-size: 600% 600%;
@@ -62,21 +71,29 @@ body.dark-mode .captcha-box {
   background: rgba(30,30,30,0.9);
   color: white;
 }
-#nowPlaying {
-  font-size: 20px;
+
+/* USER INFO */
+.user-info {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+.user-name {
   font-weight: bold;
-  margin: 15px 0;
-  background: linear-gradient(90deg, #ff70a6, #70d6ff, #7ed957);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientShift 5s ease infinite;
+  color: #333;
 }
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+body.dark-mode .user-name {
+  color: #ccc;
 }
+
+/* MUSIC PLAYER */
 .music-player {
   position: fixed;
   bottom: 90px;
@@ -117,22 +134,24 @@ body.dark-mode .music-player {
 .music-controls {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 10px;
   margin-bottom: 5px;
 }
 .music-controls button {
   background: rgba(0,0,0,0.7);
   color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 8px 12px;
   font-weight: bold;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s;
 }
 .music-controls button:hover {
   background: rgba(100,100,100,0.8);
 }
+
+/* MUSIC TITLE */
 .music-title {
   text-align: center;
   font-size: 14px;
@@ -143,6 +162,8 @@ body.dark-mode .music-player {
 body.dark-mode .music-title {
   color: #ccc;
 }
+
+/* PROGRESS BAR */
 .progress-container {
   width: 100%;
   height: 8px;
@@ -157,6 +178,8 @@ body.dark-mode .music-title {
   background: linear-gradient(90deg, #ff70a6, #70d6ff);
   transition: width 0.2s ease;
 }
+
+/* SLIDER */
 .slider-container {
   position: fixed;
   bottom: 20px;
@@ -166,9 +189,26 @@ body.dark-mode .music-title {
 }
 input[type=range] {
   width: 80%;
+  appearance: none;
+  height: 8px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #ff70a6, #70d6ff, #7ed957);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+input[type=range]::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0,0,0,0.6);
+  transition: background 0.3s;
 }
 </style>
 </head>
+
 <body>
 
 <nav>
@@ -180,7 +220,10 @@ input[type=range] {
   <div class="captcha-box">
     <h2>VPN Discord Verification</h2>
     <a id="discordLoginButton" class="theme-toggle" href="#">Login with Discord</a>
-    <input type="hidden" id="discordIdInput">
+    <div class="user-info" id="userInfo" style="display:none;">
+      <img id="userAvatar" class="user-avatar" src="">
+      <div id="userName" class="user-name"></div>
+    </div>
     <br><br>
     <select id="playlistSelector" onchange="changePlaylist()">
       <option value="shoegaze">Shoegaze/Grungaze</option>
@@ -199,13 +242,15 @@ input[type=range] {
   </div>
   <div class="music-title" id="musicTitle">Loading...</div>
   <div class="music-controls">
-    <button onclick="playMusic()">Play</button>
-    <button onclick="pauseMusic()">Pause</button>
-    <button onclick="nextMusic()">Next</button>
+    <button onclick="playMusic()">▶️</button>
+    <button onclick="pauseMusic()">⏸️</button>
+    <button onclick="nextMusic()">⏭️</button>
+    <button onclick="toggleMute()">🔇</button>
   </div>
   <div class="progress-container">
     <div class="progress-bar" id="progressBar"></div>
   </div>
+  <input type="range" id="volumeSlider" min="0" max="100" value="50" onchange="changeVolume()">
 </div>
 
 <div class="slider-container">
@@ -219,7 +264,6 @@ input[type=range] {
 const clientId = '1283074346918744175';
 const redirectUri = 'https://broheismodding.github.io/vpn-site/';
 const backendUrl = 'https://vpn-backend-plum.vercel.app';
-const verifyWebhook = 'https://api.botghost.com/webhook/1283074346918744175/zo58m0hhd0qfb0ruenl98t';
 const playlists = {
   hardcore: 'PLMJGV7p_FGBWtBoWNYv2H1508z3gyEYLS',
   shoegaze: 'PLzXFVyVdaUThF4H6qdtJBQw7iVYmULpi0',
@@ -233,18 +277,23 @@ let currentPlaylist = 'shoegaze';
 let darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 const storedTheme = localStorage.getItem('theme');
 if (storedTheme) darkMode = storedTheme === 'dark';
-function applyTheme() { document.body.classList.toggle('dark-mode', darkMode); changeHue(); localStorage.setItem('theme', darkMode ? 'dark' : 'light'); }
-function toggleTheme() { darkMode = !darkMode; applyTheme(); }
+function applyTheme() {
+  document.body.classList.toggle('dark-mode', darkMode);
+  changeHue();
+  localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+}
+function toggleTheme() {
+  darkMode = !darkMode;
+  applyTheme();
+}
 applyTheme();
 
-// Redirect to Discord
-function redirectToDiscord() {
+// OAuth2 Login
+document.getElementById('discordLoginButton').onclick = () => {
   const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
   window.location.href = oauthUrl;
-}
-document.getElementById('discordLoginButton').onclick = redirectToDiscord;
+};
 
-// OAuth2 Flow
 const urlParams = new URLSearchParams(window.location.search);
 const code = urlParams.get('code');
 
@@ -252,35 +301,31 @@ if (code) {
   fetch(`${backendUrl}/api/oauth/callback?code=${code}`)
     .then(res => res.json())
     .then(data => {
-      window.history.replaceState({}, document.title, redirectUri); // Clean URL immediately
-
+      window.history.replaceState({}, document.title, redirectUri);
       if (data.error) {
-        console.error('OAuth Error:', data.error);
         alert('❌ Discord login failed.');
         return;
       }
+      fetch(`${backendUrl}/api/userinfo?access_token=${data.access_token}`)
+        .then(res => res.json())
+        .then(userData => {
+          // Display User Avatar + Name
+          document.getElementById('userInfo').style.display = 'flex';
+          document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`;
+          document.getElementById('userName').innerText = userData.username;
 
-      console.log('Access Token:', data.access_token);
-
-      fetch(`${backendUrl}/api/verify`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({ discord_id: userData.id })
-})
-.then(() => {
-  alert('✅ You have been verified!');
-})
-.catch(() => {
-  alert('❌ Error sending verification webhook.');
-});
-      
-          } else {
-            alert('❌ Failed to fetch Discord user info.');
-          }
-        }).catch(() => {
-          alert('❌ Failed to fetch user info.');
+          // Webhook Verify (Backend Hidden)
+          fetch(`${backendUrl}/api/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ discord_id: userData.id })
+          })
+          .then(() => {
+            alert('✅ You have been verified!');
+          })
+          .catch(() => {
+            alert('❌ Error sending verification webhook.');
+          });
         });
     })
     .catch(() => {
@@ -305,6 +350,8 @@ var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 let player;
+let isMuted = false;
+
 function onYouTubeIframeAPIReady() {
   loadPlaylist(playlists[currentPlaylist]);
 }
@@ -332,6 +379,20 @@ function onPlayerStateChange(event) {
 function playMusic() { if (player) player.playVideo(); }
 function pauseMusic() { if (player) player.pauseVideo(); }
 function nextMusic() { if (player) player.nextVideo(); }
+function toggleMute() {
+  if (!player) return;
+  if (isMuted) {
+    player.unMute();
+    isMuted = false;
+  } else {
+    player.mute();
+    isMuted = true;
+  }
+}
+function changeVolume() {
+  const volume = document.getElementById('volumeSlider').value;
+  if (player) player.setVolume(volume);
+}
 function updateTitleAndImage() {
   if (!player || !player.getVideoData) return;
   const data = player.getVideoData();
@@ -347,13 +408,33 @@ setInterval(() => {
   }
 }, 500);
 
-// Playlist changer
+// Playlist change
 function changePlaylist() {
   const selector = document.getElementById('playlistSelector');
   currentPlaylist = selector.value;
   document.getElementById('nowPlaying').innerText = `Now Playing: ${selector.options[selector.selectedIndex].text}`;
   loadPlaylist(playlists[currentPlaylist]);
 }
+
+// Smooth Draggable Music Player
+const musicPlayer = document.getElementById('musicPlayer');
+let isDragging = false, offsetX = 0, offsetY = 0;
+
+musicPlayer.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  offsetX = e.clientX - musicPlayer.offsetLeft;
+  offsetY = e.clientY - musicPlayer.offsetTop;
+});
+document.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    musicPlayer.style.left = `${e.clientX - offsetX}px`;
+    musicPlayer.style.top = `${e.clientY - offsetY}px`;
+  }
+});
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+});
+
 </script>
 
 </body>
