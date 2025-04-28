@@ -262,21 +262,20 @@ if (code) {
 
       console.log('Access Token:', data.access_token);
 
-      fetch(`${backendUrl}/api/userinfo?access_token=${data.access_token}`)
-        .then(res => res.json())
-        .then(userData => {
-          if (userData.id) {
-            console.log('Discord User ID:', userData.id);
-            document.getElementById('discordIdInput').value = userData.id;
-            fetch(verifyWebhook, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ discord_id: userData.id, verified: true })
-            }).then(() => {
-              alert('✅ You have been verified!');
-            }).catch(() => {
-              alert('❌ Error sending verification webhook.');
-            });
+      fetch(`${backendUrl}/api/verify`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ discord_id: userData.id })
+})
+.then(() => {
+  alert('✅ You have been verified!');
+})
+.catch(() => {
+  alert('❌ Error sending verification webhook.');
+});
+      
           } else {
             alert('❌ Failed to fetch Discord user info.');
           }
