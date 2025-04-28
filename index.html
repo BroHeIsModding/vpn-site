@@ -283,6 +283,60 @@ input[type=range]::-webkit-slider-thumb {
     bottom: 10px;
   }
 }
+  /* 📱 EXTENDED MOBILE FIX */
+@media (max-width: 768px) {
+  .main-container {
+    padding-bottom: 250px; /* More breathing space */
+  }
+
+  .music-player {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 300px;
+    padding: 10px;
+  }
+
+  .album-art {
+    width: 80%;
+    margin: 0 auto 10px auto;
+    aspect-ratio: 1/1;
+  }
+
+  .album-art img {
+    width: 100%;
+    height: auto;
+  }
+
+  #discordLoginButton {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 18px;
+  }
+
+  #playlistSelector {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  .slider-container {
+    bottom: 80px; /* Push background hue slider up */
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  input[type=range] {
+    width: 100%;
+  }
+
+  .music-controls button {
+    padding: 8px;
+    font-size: 18px;
+  }
+}
 </style>
 </head>
 
