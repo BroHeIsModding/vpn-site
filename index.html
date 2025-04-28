@@ -51,7 +51,7 @@ nav a, .theme-toggle {
   padding-bottom: 100px;
 }
 
-/* CAPTCHABOX */
+/* CAPTCHA BOX */
 .captcha-box {
   background: rgba(255,255,255,0.85);
   padding: 30px;
@@ -61,8 +61,6 @@ nav a, .theme-toggle {
   backdrop-filter: blur(8px);
   transition: background 0.5s, color 0.5s;
 }
-
-/* DARK MODE */
 body.dark-mode {
   background: linear-gradient(270deg, hsl(240, 20%, 15%), hsl(260, 20%, 15%), hsl(280, 20%, 15%));
   background-size: 600% 600%;
@@ -72,25 +70,61 @@ body.dark-mode .captcha-box {
   color: white;
 }
 
+/* DISCORD BUTTON */
+#discordLoginButton {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: 2px solid #7289da;
+  background: transparent;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #7289da;
+  transition: 0.4s;
+}
+#discordLoginButton:hover {
+  background: #7289da;
+  color: white;
+  box-shadow: 0 0 10px #7289da;
+  transform: scale(1.05);
+}
+
 /* USER INFO */
 .user-info {
   margin-top: 20px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
 }
 .user-avatar {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   border: 2px solid white;
 }
 .user-name {
   font-weight: bold;
+  font-size: 16px;
   color: #333;
+  margin-top: 5px;
 }
 body.dark-mode .user-name {
   color: #ccc;
+}
+
+/* PLAYLIST SELECT */
+#playlistSelector {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  background: rgba(255,255,255,0.7);
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  transition: 0.3s;
+}
+#playlistSelector:hover {
+  border-color: #7289da;
 }
 
 /* MUSIC PLAYER */
@@ -102,7 +136,7 @@ body.dark-mode .user-name {
   background: rgba(255,255,255,0.85);
   backdrop-filter: blur(10px);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   padding: 10px;
   cursor: move;
   transition: background 0.5s;
@@ -131,6 +165,8 @@ body.dark-mode .music-player {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* MUSIC CONTROLS */
 .music-controls {
   display: flex;
   justify-content: center;
@@ -151,31 +187,29 @@ body.dark-mode .music-player {
   background: rgba(100,100,100,0.8);
 }
 
-/* MUSIC TITLE */
-.music-title {
-  text-align: center;
-  font-size: 14px;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #333;
+/* LABELS */
+.label {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #666;
 }
-body.dark-mode .music-title {
-  color: #ccc;
+body.dark-mode .label {
+  color: #aaa;
 }
 
-/* PROGRESS BAR */
-.progress-container {
-  width: 100%;
+/* PROGRESS + VOLUME BARS */
+.progress-container, .volume-container {
+  width: 90%;
   height: 8px;
-  background: #ddd;
+  background: linear-gradient(90deg, #5a5a9f, #3a3a60);
   border-radius: 4px;
   overflow: hidden;
-  margin-top: 5px;
+  margin: 5px auto 10px;
 }
 .progress-bar {
   width: 0%;
   height: 100%;
-  background: linear-gradient(90deg, #ff70a6, #70d6ff);
+  background: linear-gradient(90deg, #9e9ec9, #5959b0);
   transition: width 0.2s ease;
 }
 
@@ -192,7 +226,7 @@ input[type=range] {
   appearance: none;
   height: 8px;
   border-radius: 5px;
-  background: linear-gradient(90deg, #ff70a6, #70d6ff, #7ed957);
+  background: linear-gradient(90deg, #5a5a9f, #3a3a60);
   outline: none;
   cursor: pointer;
   transition: background 0.3s;
@@ -218,24 +252,22 @@ input[type=range]::-webkit-slider-thumb {
 
 <div class="main-container">
   <div class="captcha-box">
-  <h2>VPN Discord Verification</h2>
-  <a id="discordLoginButton" class="theme-toggle" href="#">Login with Discord</a>
-  <input type="hidden" id="discordIdInput">
-  <div id="userInfo" style="display:none; margin-top:10px; align-items: center; flex-direction: column;">
-    <img id="userAvatar" src="" alt="User Avatar" style="width:60px;height:60px;border-radius:50%;margin-bottom:5px;">
-    <div id="userName" style="font-weight:bold;font-size:16px;color:#555;"></div>
+    <h2>VPN Discord Verification</h2>
+    <a id="discordLoginButton" class="theme-toggle" href="#">Login with Discord</a>
+    <div id="userInfo" style="display:none; margin-top:10px; flex-direction: column; align-items: center;">
+      <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
+      <div id="userName" class="user-name"></div>
+    </div>
+    <br><br>
+    <select id="playlistSelector" onchange="changePlaylist()">
+      <option value="shoegaze">Shoegaze/Grungaze</option>
+      <option value="hardcore">Hardcore</option>
+      <option value="lofi">Lofi</option>
+      <option value="rap">Rap</option>
+      <option value="jazz">Jazz</option>
+    </select>
+    <div id="nowPlaying" style="margin-top:10px; font-weight: bold;">Now Playing: Shoegaze/Grungaze</div>
   </div>
-  <br><br>
-  <select id="playlistSelector" onchange="changePlaylist()">
-    <option value="shoegaze">Shoegaze/Grungaze</option>
-    <option value="hardcore">Hardcore</option>
-    <option value="lofi">Lofi</option>
-    <option value="rap">Rap</option>
-    <option value="jazz">Jazz</option>
-  </select>
-  <div id="nowPlaying">Now Playing: Shoegaze/Grungaze</div>
-</div>
-
 </div>
 
 <div class="music-player" id="musicPlayer">
@@ -244,18 +276,23 @@ input[type=range]::-webkit-slider-thumb {
   </div>
   <div class="music-title" id="musicTitle">Loading...</div>
   <div class="music-controls">
-    <button id="playButton" onclick="playMusic()">▶️</button>
-    <button id="pauseButton" onclick="pauseMusic()">⏸️</button>
-    <button id="nextButton" onclick="nextMusic()">⏭️</button>
+    <button onclick="playMusic()">▶️</button>
+    <button onclick="pauseMusic()">⏸️</button>
+    <button onclick="nextMusic()">⏭️</button>
     <button onclick="toggleMute()">🔇</button>
   </div>
+
+  <div class="label">Music Progress</div>
   <div class="progress-container">
     <div class="progress-bar" id="progressBar"></div>
   </div>
+
+  <div class="label">Volume</div>
   <input type="range" id="volumeSlider" min="0" max="100" value="50" onchange="changeVolume()">
 </div>
 
 <div class="slider-container">
+  <div class="label">Background Hue</div>
   <input type="range" id="hueSlider" min="0" max="360" value="0" onchange="changeHue()">
 </div>
 
@@ -274,8 +311,6 @@ const playlists = {
   jazz: 'PLneA0BedPWJEvDseXizycnviRmoHMci91'
 };
 let currentPlaylist = 'shoegaze';
-
-// Dark mode settings
 let darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 const storedTheme = localStorage.getItem('theme');
 if (storedTheme) darkMode = storedTheme === 'dark';
@@ -290,44 +325,32 @@ function toggleTheme() {
 }
 applyTheme();
 
-// OAuth2 Login
+// Discord Login
 document.getElementById('discordLoginButton').onclick = () => {
   const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
   window.location.href = oauthUrl;
 };
-
 const urlParams = new URLSearchParams(window.location.search);
 const code = urlParams.get('code');
-
 if (code) {
   fetch(`${backendUrl}/api/oauth/callback?code=${code}`)
     .then(res => res.json())
     .then(data => {
       window.history.replaceState({}, document.title, redirectUri);
-      if (data.error) {
-        alert('❌ Discord login failed.');
-        return;
-      }
+      if (data.error) { alert('❌ Discord login failed.'); return; }
       fetch(`${backendUrl}/api/userinfo?access_token=${data.access_token}`)
         .then(res => res.json())
         .then(userData => {
-          // Display User Avatar + Name
           document.getElementById('userInfo').style.display = 'flex';
           document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`;
           document.getElementById('userName').innerText = userData.username;
-
-          // Webhook Verify (Backend Hidden)
           fetch(`${backendUrl}/api/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ discord_id: userData.id })
           })
-          .then(() => {
-            alert('✅ You have been verified!');
-          })
-          .catch(() => {
-            alert('❌ Error sending verification webhook.');
-          });
+          .then(() => alert('✅ You have been verified!'))
+          .catch(() => alert('❌ Error sending verification webhook.'));
         });
     })
     .catch(() => {
@@ -335,7 +358,7 @@ if (code) {
     });
 }
 
-// Color slider
+// Gradient Hue
 function changeHue() {
   const hue = document.getElementById("hueSlider").value;
   if (darkMode) {
@@ -350,10 +373,8 @@ var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
 let player;
 let isMuted = false;
-
 function onYouTubeIframeAPIReady() {
   loadPlaylist(playlists[currentPlaylist]);
 }
@@ -383,13 +404,8 @@ function pauseMusic() { if (player) player.pauseVideo(); }
 function nextMusic() { if (player) player.nextVideo(); }
 function toggleMute() {
   if (!player) return;
-  if (isMuted) {
-    player.unMute();
-    isMuted = false;
-  } else {
-    player.mute();
-    isMuted = true;
-  }
+  if (isMuted) { player.unMute(); isMuted = false; }
+  else { player.mute(); isMuted = true; }
 }
 function changeVolume() {
   const volume = document.getElementById('volumeSlider').value;
@@ -410,7 +426,6 @@ setInterval(() => {
   }
 }, 500);
 
-// Playlist change
 function changePlaylist() {
   const selector = document.getElementById('playlistSelector');
   currentPlaylist = selector.value;
@@ -418,10 +433,9 @@ function changePlaylist() {
   loadPlaylist(playlists[currentPlaylist]);
 }
 
-// Smooth Draggable Music Player
+// Dragging
 const musicPlayer = document.getElementById('musicPlayer');
 let isDragging = false, offsetX = 0, offsetY = 0;
-
 musicPlayer.addEventListener('mousedown', (e) => {
   isDragging = true;
   offsetX = e.clientX - musicPlayer.offsetLeft;
@@ -436,8 +450,8 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseup', () => {
   isDragging = false;
 });
-
 </script>
 
 </body>
 </html>
+
