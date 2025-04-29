@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VPN Discord Verification | Bxrty Gaming - Futuristic</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VPN Discord Verification</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 
 <body class="loading">
@@ -26,6 +26,7 @@
 <div class="main-container">
   <div class="captcha-box">
     <h2>VPN Discord Verification</h2>
+
     <a id="discordLoginButton" class="theme-toggle" href="#">Login with Discord</a>
 
     <div id="userInfo" style="display:none; margin-top:10px; flex-direction: column; align-items: center;">
@@ -33,20 +34,21 @@
       <div id="userName" class="user-name"></div>
     </div>
 
-    <br>
-
-    <!-- 🎶 Custom Playlist Selector -->
-    <select id="playlistSelector" onchange="changePlaylist()" aria-label="Playlist Selector">
-      <option value="shoegaze">Shoegaze/Grungaze</option>
-      <option value="hardcore">Hardcore</option>
-      <option value="lofi">Lofi</option>
-      <option value="rap">Rap</option>
-      <option value="jazz">Jazz</option>
-    </select>
+    <!-- 🎶 CUSTOM DROPDOWN -->
+    <div class="custom-dropdown" id="customDropdown">
+      <div class="selected">Select Playlist</div>
+      <div class="options">
+        <div class="option" data-value="shoegaze">Shoegaze/Grungaze</div>
+        <div class="option" data-value="hardcore">Hardcore</div>
+        <div class="option" data-value="lofi">Lofi</div>
+        <div class="option" data-value="rap">Rap</div>
+        <div class="option" data-value="jazz">Jazz</div>
+      </div>
+    </div>
 
     <div id="nowPlaying" style="margin-top:10px; font-weight: bold;">Now Playing: Shoegaze/Grungaze</div>
 
-    <!-- 🎨 Gradient Controls -->
+    <!-- 🎨 GRADIENT CONTROLS -->
     <div class="gradient-controls">
       <button onclick="toggleGradientControls()">🎨 Customize Gradient</button>
       <div id="gradientPickers" style="display: none;">
@@ -55,7 +57,6 @@
         <input type="color" id="color3" onchange="updateGradient()">
       </div>
     </div>
-
   </div>
 </div>
 
@@ -83,14 +84,17 @@
 
 <!-- 🎛️ SLIDER CONTROLLER -->
 <div class="slider-container">
-  <div class="label">Background Hue (rotate)</div>
+  <div class="label">Background Hue</div>
   <input type="range" id="hueSlider" min="0" max="360" value="0" onchange="changeHue()">
 </div>
 
-<!-- 🔵 YouTube Player -->
+<!-- 🎥 YouTube Music Player (Hidden) -->
 <div id="player"></div>
 
-<!-- JS scripts -->
+<!-- PARTICLE BACKGROUND -->
+<canvas id="particles"></canvas>
+
+<!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script src="script.js"></script>
