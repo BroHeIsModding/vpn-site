@@ -1,6 +1,6 @@
 // SETTINGS
-const clientId = '1283074346918744175'; // <-- replace with your real Discord app client ID
-const redirectUri = window.location.origin + '/'; // auto-match your domain
+const clientId = '1283074346918744175'; // <--- replace with your real Discord App Client ID
+const redirectUri = window.location.origin + '/';
 const backendUrl = 'https://vpn-backend-plum.vercel.app';
 const playlists = {
   hardcore: 'PLMJGV7p_FGBWtBoWNYv2H1508z3gyEYLS',
@@ -14,18 +14,17 @@ let darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 const storedTheme = localStorage.getItem('theme');
 if (storedTheme) darkMode = storedTheme === 'dark';
 let customColors = JSON.parse(localStorage.getItem('customGradient')) || null;
+let selectedTheme = localStorage.getItem('presetTheme') || 'cyberpunk';
 
 // Loading screen
 window.addEventListener('load', () => {
   document.body.classList.remove('loading');
 });
 
-// Theme
+// THEME MANAGEMENT
 function applyTheme() {
   document.body.classList.toggle('dark-mode', darkMode);
-  if (customColors) {
-    updateGradient();
-  }
+  if (customColors) updateGradient();
   localStorage.setItem('theme', darkMode ? 'dark' : 'light');
 }
 function toggleTheme() {
@@ -34,13 +33,13 @@ function toggleTheme() {
 }
 applyTheme();
 
-// Discord Login
+// DISCORD LOGIN
 document.getElementById('discordLoginButton').onclick = () => {
   const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
   window.location.href = oauthUrl;
 };
 
-// Discord OAuth Callback
+// DISCORD OAUTH CALLBACK
 const urlParams = new URLSearchParams(window.location.search);
 const code = urlParams.get('code');
 if (code) {
@@ -70,7 +69,53 @@ if (code) {
     .catch(() => Swal.fire('Error', 'OAuth2 flow error.', 'error'));
 }
 
-// Gradient Color Customizer
+// CUSTOM DROPDOWN
+const dropdown = document.getElementById('customDropdown');
+const selected = dropdown.querySelector('.selected');
+const optionsContainer = dropdown.querySelector('.options');
+const optionsList = dropdown.querySelectorAll('.option');
+
+selected.addEventListener('click', () => {
+  optionsContainer.style.display = optionsContainer.style.display === 'block' ? 'none' : 'block';
+});
+
+optionsList.forEach(o => {
+  o.addEventListener('click', () => {
+    const playlistName = o.innerText;
+    currentPlaylist = o.getAttribute('data-value');
+    document.getElementById('nowPlaying').innerText = `Now Playing: ${playlistName}`;
+    loadPlaylist(playlists[currentPlaylist]);
+    optionsContainer.style.display = 'none';
+    selected.innerText = playlistName;
+    Swal.fire('Now Playing', playlistName, 'success');
+    localStorage.setItem('lastPlaylist', currentPlaylist);
+  });
+});
+
+// PRESET THEMES
+function applyPresetTheme(themeName) {
+  if (themeName === 'cyberpunk') {
+    document.getElementById('color1').value = '#8e2de2';
+    document.getElementById('color2').value = '#4a00e0';
+    document.getElementById('color3').value = '#00f0ff';
+  }
+  if (themeName === 'sunset') {
+    document.getElementById('color1').value = '#ff7e5f';
+    document.getElementById('color2').value = '#feb47b';
+    document.getElementById('color3').value = '#ffd194';
+  }
+  if (themeName === 'ocean') {
+    document.getElementById('color1').value = '#43cea2';
+    document.getElementById('color2').value = '#185a9d';
+    document.getElementById('color3').value = '#2b5876';
+  }
+  updateGradient();
+  localStorage.setItem('presetTheme', themeName);
+}
+
+applyPresetTheme(selectedTheme);
+
+// GRADIENT CONTROLS
 function toggleGradientControls() {
   const controls = document.getElementById('gradientPickers');
   controls.style.display = controls.style.display === 'none' ? 'block' : 'none';
@@ -86,19 +131,13 @@ function updateGradient() {
   localStorage.setItem('customGradient', JSON.stringify(customColors));
 }
 
-// Set saved custom colors if any
-if (customColors) {
-  document.getElementById('color1').value = customColors.color1;
-  document.getElementById('color2').value = customColors.color2;
-  document.getElementById('color3').value = customColors.color3;
-  updateGradient();
-}
-
-// YouTube Player
+// MUSIC PLAYER
 let player;
 let isMuted = false;
 function onYouTubeIframeAPIReady() {
-  loadPlaylist(playlists[currentPlaylist]);
+  if (typeof YT !== 'undefined' && YT && YT.Player) {
+    loadPlaylist(playlists[currentPlaylist]);
+  }
 }
 function loadPlaylist(listId) {
   if (player) player.destroy();
@@ -111,7 +150,6 @@ function loadPlaylist(listId) {
 }
 function onPlayerReady(event) {
   event.target.setVolume(50);
-  playMusic();
 }
 function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.PLAYING) {
@@ -148,21 +186,13 @@ setInterval(() => {
   }
 }, 500);
 
-// Playlist Switching
-function changePlaylist() {
-  const selector = document.getElementById('playlistSelector');
-  currentPlaylist = selector.value;
-  document.getElementById('nowPlaying').innerText = `Now Playing: ${selector.options[selector.selectedIndex].text}`;
-  loadPlaylist(playlists[currentPlaylist]);
-}
-
-// Background Hue rotation (optional)
+// Background Hue
 function changeHue() {
   const hue = document.getElementById('hueSlider').value;
   document.body.style.filter = `hue-rotate(${hue}deg)`;
 }
 
-// Music Player Dragging
+// DRAGGING MUSIC PLAYER
 const musicPlayer = document.getElementById('musicPlayer');
 let isDragging = false, offsetX = 0, offsetY = 0;
 musicPlayer.addEventListener('mousedown', (e) => {
@@ -174,7 +204,6 @@ document.addEventListener('mousemove', (e) => {
   if (isDragging) {
     let newX = e.clientX - offsetX;
     let newY = e.clientY - offsetY;
-    // Stay inside viewport
     newX = Math.max(0, Math.min(window.innerWidth - musicPlayer.offsetWidth, newX));
     newY = Math.max(0, Math.min(window.innerHeight - musicPlayer.offsetHeight, newY));
     musicPlayer.style.left = `${newX}px`;
@@ -184,3 +213,47 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseup', () => {
   isDragging = false;
 });
+
+// PARTICLES BACKGROUND
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particlesArray;
+
+function initParticles() {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  particlesArray = [];
+  const numberOfParticles = 100;
+  for (let i = 0; i < numberOfParticles; i++) {
+    particlesArray.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 3 + 1,
+      speedX: Math.random() * 1 - 0.5,
+      speedY: Math.random() * 1 - 0.5
+    });
+  }
+}
+function handleParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = 0; i < particlesArray.length; i++) {
+    const p = particlesArray[i];
+    p.x += p.speedX;
+    p.y += p.speedY;
+    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,255,255,0.7)';
+    ctx.fill();
+  }
+}
+function animateParticles() {
+  handleParticles();
+  requestAnimationFrame(animateParticles);
+}
+
+window.addEventListener('resize', initParticles);
+
+initParticles();
+animateParticles();
