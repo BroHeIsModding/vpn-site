@@ -110,8 +110,8 @@ nav a:hover, .theme-toggle:hover {
 #playlistSelector {
   margin-top: 20px;
   padding: 10px;
-  background: rgba(255,255,255,0.08);
-  color: var(--accent-light);
+  background: rgba(20, 20, 30, 0.8); /* Dark glassy background */
+  color: white;
   border: 2px solid var(--accent-light);
   border-radius: 10px;
   appearance: none;
@@ -124,9 +124,24 @@ nav a:hover, .theme-toggle:hover {
   background-position: right 15px center;
   background-size: 20px;
 }
-#playlistSelector:hover {
-  border-color: var(--accent-dark);
+
+#playlistSelector option {
+  background: #111; /* Dark background for options */
+  color: white;
 }
+
+/* Light Theme Adjustments */
+body:not(.dark-mode) #playlistSelector {
+  background: rgba(255, 255, 255, 0.7); /* Light glass background */
+  color: black;
+  border: 2px solid #333;
+}
+
+body:not(.dark-mode) #playlistSelector option {
+  background: #eee; /* Light background for options */
+  color: #111;
+}
+
 
 /* GRADIENT CONTROL PANEL */
 .gradient-controls {
