@@ -1,6 +1,6 @@
 // SETTINGS
 const clientId = '1283074346918744175'; // <--- replace with your real Discord App Client ID
-const redirectUri = window.location.origin + '/';
+const redirectUri = window.location.origin + '/vpn-site/';
 const backendUrl = 'https://vpn-backend-plum.vercel.app';
 const playlists = {
   hardcore: 'PLMJGV7p_FGBWtBoWNYv2H1508z3gyEYLS',
