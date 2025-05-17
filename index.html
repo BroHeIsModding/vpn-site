@@ -2,102 +2,116 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VPN Discord Verification</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Verification | Bxrty Gaming - Futuristic</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="loading">
+  <!-- 🔵 LOADING SCREEN -->
+  <div id="loadingScreen">
+    <div class="loader">Loading...</div>
+  </div>
 
-<!-- 🔵 LOADING SCREEN -->
-<div id="loadingScreen">
-  <div class="loader">Loading...</div>
-</div>
+  <!-- 🔵 NAVIGATION -->
+  <nav>
+    <a href="https://discord.gg/vpn" target="_blank">Join Bxrty's VPN Server!</a>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-pressed="false">
+      <span class="sr-only">Toggle</span> Dark Mode
+    </button>
+  </nav>
 
-<!-- 🔵 NAVIGATION -->
-<nav>
-  <a href="https://discord.gg/vpn" target="_blank">Join Bxrty's VPN Server!</a>
-  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
-</nav>
+  <!-- 🔵 MAIN CONTENT -->
+  <div class="main-container">
+    <div class="verification-box">
+      <h2>Discord Verification</h2>
+      
+      <div class="verification-steps">
+        <ol>
+          <li>Click "Login with Discord" below</li>
+          <li>Authorize with your Discord account</li>
+          <li>Get instant access to the server</li>
+        </ol>
+      </div>
 
-<!-- 🔵 MAIN CONTENT -->
-<div class="main-container">
-  <div class="captcha-box">
-    <h2>VPN Discord Verification</h2>
+      <a id="discordLoginButton" class="discord-btn" href="#">Login with Discord</a>
 
-    <a id="discordLoginButton" class="theme-toggle" href="#">Login with Discord</a>
+      <div id="verificationStatus"></div>
 
-    <div id="userInfo" style="display:none; margin-top:10px; flex-direction: column; align-items: center;">
-      <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
-      <div id="userName" class="user-name"></div>
-    </div>
+      <div id="userInfo" style="display:none;">
+        <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
+        <div id="userName" class="user-name"></div>
+        <div id="userStatus" class="user-status">✅ Successfully verified!</div>
+        <a href="https://discord.gg/vpn" class="join-server-btn" target="_blank">Join Server Now</a>
+      </div>
 
-    <!-- 🎶 CUSTOM DROPDOWN -->
-    <div class="custom-dropdown" id="customDropdown">
-      <div class="selected">Select Playlist</div>
-      <div class="options">
-        <div class="option" data-value="shoegaze">Shoegaze/Grungaze</div>
-        <div class="option" data-value="hardcore">Hardcore</div>
-        <div class="option" data-value="lofi">Lofi</div>
-        <div class="option" data-value="rap">Rap</div>
-        <div class="option" data-value="jazz">Jazz</div>
+      <div class="divider"></div>
+
+      <!-- 🎶 Custom Playlist Selector -->
+      <div class="playlist-section">
+        <h3>Music Player</h3>
+        <select id="playlistSelector" onchange="changePlaylist()" aria-label="Playlist Selector">
+          <option value="shoegaze">Shoegaze/Grungaze</option>
+          <option value="hardcore">Hardcore</option>
+          <option value="lofi">Lofi</option>
+          <option value="rap">Rap</option>
+          <option value="jazz">Jazz</option>
+        </select>
+        <div id="nowPlaying">Now Playing: Shoegaze/Grungaze</div>
+      </div>
+
+      <!-- 🎨 Gradient Controls -->
+      <div class="gradient-controls">
+        <button onclick="toggleGradientControls()">🎨 Customize Gradient</button>
+        <div id="gradientPickers" style="display: none;">
+          <input type="color" id="color1" value="#4a00e0" onchange="updateGradient()">
+          <input type="color" id="color2" value="#8e2de2" onchange="updateGradient()">
+          <input type="color" id="color3" value="#fc00ff" onchange="updateGradient()">
+        </div>
       </div>
     </div>
+  </div>
 
-    <div id="nowPlaying" style="margin-top:10px; font-weight: bold;">Now Playing: Shoegaze/Grungaze</div>
-
-    <!-- 🎨 GRADIENT CONTROLS -->
-    <div class="gradient-controls">
-      <button onclick="toggleGradientControls()">🎨 Customize Gradient</button>
-      <div id="gradientPickers" style="display: none;">
-        <input type="color" id="color1" onchange="updateGradient()">
-        <input type="color" id="color2" onchange="updateGradient()">
-        <input type="color" id="color3" onchange="updateGradient()">
+  <!-- 🎶 MUSIC PLAYER -->
+  <div class="music-player" id="musicPlayer">
+    <div class="album-art" id="albumArt">
+      <img id="albumImage" src="https://i.imgur.com/9Q7SfQj.png" alt="Album Art">
+    </div>
+    <div class="music-info">
+      <div class="music-title" id="musicTitle">Select a playlist</div>
+      <div class="track-info">
+        <span id="currentTime">0:00</span>
+        <input type="range" id="progressSlider" min="0" max="100" value="0">
+        <span id="totalTime">0:00</span>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- 🎶 MUSIC PLAYER -->
-<div class="music-player" id="musicPlayer">
-  <div class="album-art" id="albumArt">
-    <img id="albumImage" src="" alt="Album Art">
-  </div>
-  <div class="music-title" id="musicTitle">Loading...</div>
-  <div class="music-controls">
-    <button onclick="playMusic()" aria-label="Play">▶️</button>
-    <button onclick="pauseMusic()" aria-label="Pause">⏸️</button>
-    <button onclick="nextMusic()" aria-label="Next">⏭️</button>
-    <button onclick="toggleMute()" aria-label="Mute/Unmute">🔇</button>
+    <div class="music-controls">
+      <button onclick="previousTrack()" aria-label="Previous">⏮️</button>
+      <button onclick="playMusic()" aria-label="Play">▶️</button>
+      <button onclick="pauseMusic()" aria-label="Pause">⏸️</button>
+      <button onclick="nextTrack()" aria-label="Next">⏭️</button>
+      <button onclick="toggleMute()" aria-label="Mute/Unmute">🔇</button>
+    </div>
+    <div class="volume-control">
+      <span>Volume:</span>
+      <input type="range" id="volumeSlider" min="0" max="100" value="50" onchange="changeVolume()">
+    </div>
   </div>
 
-  <div class="label">Music Progress</div>
-  <div class="progress-container">
-    <div class="progress-bar" id="progressBar"></div>
+  <!-- 🎛️ SLIDER CONTROLLER -->
+  <div class="slider-container">
+    <div class="label">Background Hue (rotate)</div>
+    <input type="range" id="hueSlider" min="0" max="360" value="0" onchange="changeHue()">
   </div>
 
-  <div class="label">Volume</div>
-  <input type="range" id="volumeSlider" min="0" max="100" value="50" onchange="changeVolume()">
-</div>
+  <!-- 🔵 YouTube Player -->
+  <div id="player"></div>
 
-<!-- 🎛️ SLIDER CONTROLLER -->
-<div class="slider-container">
-  <div class="label">Background Hue</div>
-  <input type="range" id="hueSlider" min="0" max="360" value="0" onchange="changeHue()">
-</div>
-
-<!-- 🎥 YouTube Music Player (Hidden) -->
-<div id="player"></div>
-
-<!-- PARTICLE BACKGROUND -->
-<canvas id="particles"></canvas>
-
-<!-- SCRIPTS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://www.youtube.com/iframe_api"></script>
-<script src="script.js"></script>
-
+  <!-- JS scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="script.js"></script>
 </body>
 </html>
